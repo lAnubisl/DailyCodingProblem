@@ -2,63 +2,16 @@
 
 namespace _2019_06_19
 {
-    class Node
-    {
-        public string Value;
-        public Node Left;
-        public Node Right;
-    }
-
-    class Serializer
-    {
-        public string Serialize(Node node)
-        {
-            if (node == null) return string.Empty;
-            return $"[{node.Value},{Serialize(node.Left)},{Serialize(node.Right)}]";
-        }
-
-        public Node Deserialize(string serializedNode)
-        {
-            if (string.IsNullOrEmpty(serializedNode)) return null;
-            return Deserialize(serializedNode.ToCharArray());
-        }
-
-        static Node Deserialize(char[] serializedNode)
-        {
-            var leftBound = 0;
-            return Deserialize(serializedNode, ref leftBound);
-        }
-
-        static Node Deserialize(char[] serializedNode, ref int leftBound)
-        {
-            if (serializedNode[leftBound] != '[') return null;
-            leftBound += 1;
-            var value = ReadUntil(serializedNode, ref leftBound, ',');
-            leftBound += 1;
-            var leftNode = Deserialize(serializedNode, ref leftBound);
-            leftBound += 1;
-            var rightNode = Deserialize(serializedNode, ref leftBound);
-            leftBound += 1;
-            return new Node
-            {
-                Value = value,
-                Left = leftNode,
-                Right = rightNode
-            };
-        }
-
-        static string ReadUntil(char[] serializedNode, ref int leftBound, char c)
-        {
-            var start = leftBound;
-            var end = Array.IndexOf(serializedNode, c, leftBound, serializedNode.Length - leftBound);
-            var length = end - start;
-            leftBound += length;
-            var res = new char[length];
-            Array.Copy(serializedNode, start, res, 0, length);
-            return new string(res);
-        }
-    }
-
+    //Given the root to a binary tree, implement serialize(root), which serializes the tree into a string, and deserialize(s), which deserializes the string back into the tree.
+    //For example, given the following Node class
+    //class Node :
+    //    def __init__(self, val, left=None, right=None):
+    //        self.val = val
+    //        self.left = left
+    //        self.right = right
+    //The following test should pass:
+    //node = Node('root', Node('left', Node('left.left')), Node('right'))
+    //assert deserialize(serialize(node)).left.left.val == 'left.left'
     class Program
     {
         static void Main(string[] args)
