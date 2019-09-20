@@ -9,12 +9,6 @@ namespace _2019_09_20
     */
     class Program
     {
-        static void Main(string[] args)
-        {
-            var result = Permutations(new[] { 1, 2, 3 });
-            Console.WriteLine("Hello World!");
-        }
-
         // First. add fuction that generates permutations for an array and an integer.
         // The goal is to place that integer before each digit in an array and in the end.
         // [1, 2, 3], 4 => [4, 1, 2, 3], [1, 4, 2, 3], [1, 2, 4, 3], [1, 2, 3, 4]
@@ -63,6 +57,18 @@ namespace _2019_09_20
                 res = res.SelectMany(r => Permutations(r, a[i])).ToArray();
 
             return res;
+        }
+
+        // Now. generate the input and calculate the result
+        static void Main(string[] args)
+        {
+            var result = Permutations(new[] { 1, 2, 3 });
+            foreach (var r in result)
+            {
+                Console.WriteLine($"[{String.Join(", ", r)}]");
+            }
+
+            Console.ReadLine();
         }
     }
 }
