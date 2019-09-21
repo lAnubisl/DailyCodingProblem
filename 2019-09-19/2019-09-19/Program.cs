@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace _2019_09_19
 {
@@ -10,76 +8,49 @@ namespace _2019_09_19
     */
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            var input = new int[] { 3, 2, 1 };
-            var permutations = FindAllPermutations(input);
-            permutations.Sort(new ArrayOfIntComparer());
-            var lexicographiclyGreater = FindLexicographiclyGreater(permutations, input);
-            if (lexicographiclyGreater == null) lexicographiclyGreater = permutations.First();
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(String.Join(", ", FindSolution(new int[] { 1, 2, 4, 3 })));
+            Console.ReadKey();
         }
 
-        static List<int[]> FindAllPermutations(int[] input)
+        static int[] FindSolution(int[] a)
         {
-            if (input == null || input.Length == 0) return null;
-            var accumulator = new List<List<int>>();
-            accumulator.Add(new List<int>() { input.First() });
-            for (var i = 1; i < input.Length; i++)
-            {
-                FindAllPermutations(input[i], ref accumulator);
-            }
+            var res = new int[a.Length];
+            // copy original array to resulting array, 
+            // so original array will not be modified
+            Array.Copy(a, 0, res, 0, a.Length);
 
-            return accumulator.Select(x => x.ToArray()).ToList();
+            // if we can't find next then find minimal one
+            if (!FindNext(res)) Array.Sort(res);
+            return res;
         }
 
-        static int[] FindLexicographiclyGreater(List<int[]> permutations, int[] marker)
+        // start iterating array from the end to the beginning
+        // the goal is to take lower rank and find lower value from upper ranks
+        // [1, 2, 4, 3] -> [1, 3, 2, 4]
+        //     ^     ^         ^ [sort the rest]
+        static bool FindNext(int[] a)
         {
-            var comparer = new ArrayOfIntComparer();
-            foreach (var permutation in permutations)
-            {
-                if (comparer.Compare(permutation, marker) > 0) return permutation;
-            }
+            for (int i = a.Length - 1; i > 0; i--)
+                for (int j = i; j >= 0; j--) // if we have not found correct place for lower rank then take next one
+                    if (a[j] < a[i])
+                    {
+                        Swap(a, i, j);
 
-            return null;
+                        // sort the rest of array
+                        Array.Sort(a, j + 1, a.Length - j - 1);
+                        return true;
+                    }
+
+            return false;
         }
 
-        static void FindAllPermutations(int digit, ref List<List<int>> accumulator)
+        static void Swap(int[] a, int i, int j)
         {
-            var temp = new List<List<int>>();
-            foreach (var example in accumulator)
-            {
-                foreach (var newPermutation in FindAllPermutations(example, digit))
-                {
-                    temp.Add(newPermutation);
-                }
-            }
-
-            accumulator = temp;
-        }
-
-        static IEnumerable<List<int>> FindAllPermutations(List<int> existingDigits, int newDigit)
-        {
-            for(var i = 0; i <= existingDigits.Count; i++)
-            {
-                var res = new List<int>(existingDigits);
-                res.Insert(i, newDigit);
-                yield return res;
-            }
-        }
-
-        public class ArrayOfIntComparer : IComparer<int[]>
-        {
-            public int Compare(int[] x, int[] y)
-            {
-                for(var i = 0; i < x.Length; i++)
-                {
-                    if (x[i] > y[i]) return 1;
-                    if (x[i] < y[i]) return -1;
-                }
-
-                return 0;
-            }
+            var t = a[i];
+            a[i] = a[j];
+            a[j] = t;
         }
     }
 }
