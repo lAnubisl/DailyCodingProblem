@@ -9,22 +9,18 @@ namespace _2019_09_20
     */
     class Program3
     {
-        public static void Main()
-        {
-            var a = new int[] { 1, 2, 3 };
-            foreach (var permutation in Permutations(a))
-                Console.WriteLine($"[{string.Join(", ", permutation)}]");
-            Console.ReadLine();
-        }
         /*
-         1  2  3
-         -------
-         {2 1} 3
-         2 {3 1}
-         {3 2} 1
-         3 {1 2}
-         {1 3} 2
-         1 {2 3}
+         The idea is to swap 2 elements in the following way:
+         iteration   data
+         input        1 <> 2    3
+         1            2    1 <> 3
+         2            2 <> 3    1
+         3            3    2 <> 1
+         4            3 <> 1    2
+         5            1    3 <> 2
+         6            1    2    3
+
+         The number of permutations for unique elements is always n! where n is the number of elements
        */
         static IEnumerable<int[]> Permutations(int[] a)
         {
@@ -39,6 +35,8 @@ namespace _2019_09_20
             }
         }
 
+        static int Fuctorial(int n) => n == 0 ? 1 : n * Fuctorial(n - 1);
+
         static void Swap(int[] a, int i, int j)
         {
             var t = a[i];
@@ -46,9 +44,12 @@ namespace _2019_09_20
             a[j] = t;
         }
 
-        static int Fuctorial(int n)
+        public static void Main()
         {
-            return n == 0 ? 1 : n * Fuctorial(n - 1);
+            var a = new int[] { 1, 2, 3 };
+            foreach (var permutation in Permutations(a))
+                Console.WriteLine($"[{string.Join(", ", permutation)}]");
+            Console.ReadLine();
         }
     }
 }
