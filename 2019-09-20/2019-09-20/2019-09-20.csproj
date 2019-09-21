@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>_2019_09_20</RootNamespace>
-    <StartupObject>_2019_09_20.Program3</StartupObject>
+    <StartupObject>_2019_09_20.Program2</StartupObject>
   </PropertyGroup>
 
 </Project>
